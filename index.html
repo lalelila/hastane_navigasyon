@@ -22,8 +22,13 @@
         label { font-size: 12px; font-weight: bold; margin-top: 10px; display: block; }
 
         /* Harita Alanı */
+        #viewport { flex: 1; overflow: auto; position: flex; background: #dcdde1; outline: none; }
         #map-area { flex: 1; overflow: auto; display: flex; justify-content: center; align-items: flex-start; padding: 20px; }
-        svg { width: 95%; height: auto; background: white; border: 1px solid #ccc; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+        svg {
+            width: 100vw;
+            height: 100vh;
+            display: block;
+        }
         
         .node-circle { fill: var(--accent); stroke: white; stroke-width: 2; r: 12; cursor: pointer; }
         .node-label { font-size: 13px; font-weight: bold; fill: black; paint-order: stroke; stroke: white; stroke-width: 3px; pointer-events: none; }
@@ -62,6 +67,24 @@
         body.admin-mode .node-label { 
             display: block !important; 
         }
+
+        /* Mobil Duyarlılık Ayarları */
+        @media (max-width: 768px) {
+            .side-panel {
+                width: 95% !important;
+                left: 2.5% !important;
+                right: 2.5% !important;
+                top: 65px;
+                max-height: 45vh;
+                padding: 15px;
+            }
+        #editor-panel { display: none !important; } /* Mobilde sadece kullanıcı modu */
+        .z-btn { width: 50px; height: 50px; font-size: 24px; }
+        .btn-action { padding: 12px 10px; font-size: 13px; } /* Butonları büyüttük */
+        }
+
+        /* Dokunmatik yüzeyde seçilmeyi engelle */
+        #viewport { touch-action: none; user-select: none; -webkit-user-drag: none; }
     </style>
 </head>
 <body onkeydown="handleGlobalKeys(event)">
@@ -109,7 +132,11 @@
     <button class="z-btn" onclick="zoom(0.8)">-</button>
 </div>
 
-<div id="viewport" onmousedown="startPan(event)" onmousemove="doPan(event)" onmouseup="endPan()">
+
+
+<div id="viewport" 
+     onmousedown="startPan(event)" onmousemove="doPan(event)" onmouseup="endPan()"
+     ontouchstart="handleTouchStart(event)" ontouchmove="handleTouchMove(event)" ontouchend="endPan()">
     <div id="map-wrapper" onclick="handleMapClick(event)"></div>
 </div>
 
@@ -428,9 +455,11 @@ function rotaCiz(start, end) {
     pLine.setAttribute("points", pathCoords.map(p => `${p.x},${p.y}`).join(" "));
     
     const target = pathCoords[pathCoords.length - 1];
-    pointX = -(target.x * scale) + (window.innerWidth / 2);
-    pointY = -(target.y * scale) + (window.innerHeight / 2);
-    updateTrans();
+    const viewport = document.getElementById("viewport");
+    const rect = viewport.getBoundingClientRect();
+
+    
+    
 }
 
 function zoom(f) { scale *= f; updateTrans(); }
@@ -455,6 +484,30 @@ function doPan(e) { if (!isPanning) return; pointX = e.clientX - startX; pointY 
 function endPan() { isPanning = false; }
 function updateTrans() { document.getElementById("map-wrapper").style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`; }
 function resetApp() { if(confirm("Tüm hafıza silinecek!")) { localStorage.clear(); location.reload(); } }
+
+// --- MOBİL DOKUNMATİK KONTROLLER ---
+function handleTouchStart(e) {
+    if (e.target.tagName === 'BUTTON' || e.target.tagName === 'INPUT') return;
+    isPanning = true;
+    const touch = e.touches[0];
+    startX = touch.clientX - pointX;
+    startY = touch.clientY - pointY;
+}
+
+
+
+// Mevcut zoom fonksiyonuna çift parmak (pinch zoom) eklemek karmaşıktır, 
+// şimdilik ekranın solundaki + ve - butonları mobilde de mükemmel çalışacaktır.
+
+// Bu kısmı script içine ekle
+function handleTouchMove(e) {
+    if (!isPanning || e.touches.length !== 1) return;
+    e.preventDefault(); // Sayfanın aşağı kaymasını engeller, sadece harita kayar
+    const touch = e.touches[0];
+    pointX = touch.clientX - startX;
+    pointY = touch.clientY - startY;
+    updateTrans();
+}
 </script>
 </body>
 </html>
