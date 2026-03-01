@@ -37,7 +37,7 @@
         .mode-user { background: var(--primary); }
         
 
-        .side-panel { position: absolute; top: 80px; width: 340px; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); z-index: 900; max-height: 50vh; overflow-y: auto; }
+        .side-panel { position: absolute; top: 90px; width: 340px; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); z-index: 900; max-height: 50vh; overflow-y: auto; }
         #search-panel { left: 20px; }
         #editor-panel { right: 20px; background: #2d3436; color: white; display: none; }
         
@@ -79,37 +79,7 @@
           transition: transform 0.1s ease-out; /*-> Bu satırı istersen ekleyebilirsin, geçişleri yumuşatır */
           will-change: transform;
         }
-
-        @media screen and (max-height: 500px) {
-          #top-bar {
-            padding: 4px 10px !important;
-            height: auto !important;
-          }
-
-          #search-panel {
-            top: 50px !important; /* Üst barın hemen altına yapıştır */
-            width: 100% !important; /* Ekranı tam kaplasın ama yüksekliği az olsun */
-            left: 0 !important;
-            right: 0 !important;
-            border-radius: 0 !important;
-            padding: 10px !important;
-            max-height: 120px !important; /* Klavye açıkken sonuçlar sığsın diye kısıtladık */
-            overflow-y: auto;
-          }  
-
-          /* Arama kutusunu küçültelim */
-          #searchInput {
-            padding: 8px !important;
-            font-size: 14px !important;
-          }
-
-         /* Sonuç öğelerini yatayda yan yana veya daha ince yapalım */
-          .result-item {
-            padding: 5px !important;
-            font-size: 12px !important;
-            margin-bottom: 2px !important;
-          }
-        }
+        
 
        
     </style>
@@ -4939,12 +4909,6 @@ function selectEnd(id, name) {
     document.getElementById('results').innerHTML = "";
     document.getElementById('searchInput').value = name;
     rotaCiz(currentStartId, currentEndId);
-
-    // Klavyeyi otomatik kapat (Focus'u kaldırır)
-    document.activeElement.blur(); 
-    
-    // Paneli temizle
-    document.getElementById('results').innerHTML = "";
 }
 
 function render() {
