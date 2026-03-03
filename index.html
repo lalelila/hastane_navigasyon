@@ -86,7 +86,7 @@
           /* 1. Üst Bar ve Butonlar */
           #top-bar {
             height: 80px !important; /* Yüksekliği artır */
-            padding: 50px 15px !important;
+            padding: 10px 15px !important;
             gap: 15px !important;
           } 
 
@@ -106,7 +106,7 @@
           #searchInput {
             height: 55px !important;
             font-size: 20px !important; /* Yazılar daha okunaklı */
-            padding: 15px !important;
+            padding: 50px !important;
           }
 
           /* 3. InfoBox (Sağ Üstteki Bilgi Paneli) */
@@ -4829,7 +4829,7 @@ window.onload = () => {
     document.getElementById('hieInput').value = JSON.stringify(hierarchy, null, 2);
     syncUI();
     render();
-    checkOrientation();
+    updateTrans();
 };
 
 function checkOrientation() {
