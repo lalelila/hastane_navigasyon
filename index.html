@@ -80,7 +80,71 @@
           will-change: transform;
         }
         
+        /* Sadece dikey tutulan (Portrait) ve genişliği 768px'den küçük cihazlar için */
+        @media screen and (max-width: 768px) and (orientation: portrait) {
+    
+          /* 1. Üst Bar ve Butonlar */
+          #top-bar {
+            height: 80px !important; /* Yüksekliği artır */
+            padding: 10px 15px !important;
+            gap: 15px !important;
+          } 
 
+          #top-bar button, .top-btn {
+            padding: 12px 20px !important;
+            font-size: 18px !important;
+            border-radius: 12px !important;
+          }
+
+          /* 2. Arama Motoru (Input) */
+          #search-panel {
+            top: 95px !important; /* Üst bar kalınlaştığı için aşağı kaydırdık */
+            width: 90% !important;
+            left: 5% !important;
+          }
+
+          #searchInput {
+            height: 55px !important;
+            font-size: 20px !important; /* Yazılar daha okunaklı */
+            padding: 15px !important;
+          }
+
+          /* 3. InfoBox (Sağ Üstteki Bilgi Paneli) */
+          #info-box {
+            top: 160px !important; /* Arama motorunun altına denk gelmemesi için */
+            right: 15px !important;
+            padding: 15px !important;
+            font-size: 16px !important;
+            min-width: 150px !important;
+          }
+
+          /* 4. Yan Panel ve İçindeki Butonlar */
+          .side-panel {
+            width: 85% !important;
+            padding: 20px !important;
+          }
+
+          .side-panel button {
+            padding: 15px !important;
+            font-size: 18px !important;
+            margin-bottom: 10px !important;
+          }
+
+          /* 5. Harita (Map-Wrapper) ve Zoom Butonları */
+          /* Haritayı dikeyde daha büyük başlatmak için başlangıç scale değerini JS'den kontrol etmelisin */
+          .zoom-controls {
+            bottom: 40px !important;
+            left: 50% !important;
+            transform: translateX(-50%); /* Mobilde dikeyde ortaladık */
+            gap: 25px !important;
+          }
+
+          .z-btn {
+            width: 75px !important;
+            height: 75px !important;
+            font-size: 35px !important;
+          }
+        }
        
     </style>
 </head>
@@ -4749,7 +4813,7 @@ viewBox="0 0 2949 1499">
 let history = [];
 
 let mode = 'user';
-let scale = 1, pointX = 0, pointY = 0;
+let scale, pointX, pointY;
 let isPanning = false, startX, startY;
 let selectedId = null;
 let lastClickedId = null;
@@ -4767,6 +4831,25 @@ window.onload = () => {
     render();
     updateTrans();
 };
+
+function checkOrientation() {
+    // Sadece dikey (portrait) ve mobil (768px altı) ise
+    if (window.innerHeight > window.innerWidth && window.innerWidth < 768) {
+        scale = 1.0;  // Dikeyde haritayı daha yakından başlat (Eskiden 0.5 ise 1.0 yap)
+        pointX = 0; // Haritayı biraz kaydırarak dikey ekrana sığdır
+        pointY = 0;
+    } else {
+        // Bilgisayar veya Yatay Mobil
+        scale = 1;
+        pointX = 0;
+        pointY = 0;
+    }
+    updateTrans();
+}
+
+// Hem sayfa yüklendiğinde hem de telefon çevrildiğinde kontrol et
+window.addEventListener('load', checkOrientation);
+window.addEventListener('resize', checkOrientation);
 
 
 
