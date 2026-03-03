@@ -4837,7 +4837,7 @@ function checkOrientation() {
     if (window.innerHeight > window.innerWidth && window.innerWidth < 768) {
         scale = 1.0;  // Dikeyde haritayı daha yakından başlat (Eskiden 0.5 ise 1.0 yap)
         pointX = 0; // Haritayı biraz kaydırarak dikey ekrana sığdır
-        pointY = 0;
+        pointY = -300;
     } else {
         // Bilgisayar veya Yatay Mobil
         scale = 1;
