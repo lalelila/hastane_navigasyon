@@ -86,7 +86,7 @@
           /* 1. Üst Bar ve Butonlar */
           #top-bar {
             height: 80px !important; /* Yüksekliği artır */
-            padding: 10px 15px !important;
+            padding: 50px 15px !important;
             gap: 15px !important;
           } 
 
@@ -4835,9 +4835,9 @@ window.onload = () => {
 function checkOrientation() {
     // Sadece dikey (portrait) ve mobil (768px altı) ise
     if (window.innerHeight > window.innerWidth && window.innerWidth < 768) {
-        scale = 1.0;  // Dikeyde haritayı daha yakından başlat (Eskiden 0.5 ise 1.0 yap)
+        scale = 3;  // Dikeyde haritayı daha yakından başlat (Eskiden 0.5 ise 1.0 yap)
         pointX = 0; // Haritayı biraz kaydırarak dikey ekrana sığdır
-        pointY = -300;
+        pointY = 300;
     } else {
         // Bilgisayar veya Yatay Mobil
         scale = 1;
